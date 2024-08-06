@@ -1,4 +1,37 @@
-import { BoxGeometry, Mesh, MeshStandardMaterial, Matrix4,MathUtils } from 'three';
+import { BoxGeometry, Mesh, MeshStandardMaterial, Matrix4, MathUtils, TextureLoader } from 'three';
+import textureUrl from '@/assets/textures/uv-test-bw.png';
+
+function createMaterial() {
+    // create a texture loader.
+    const textureLoader = new TextureLoader();
+
+    // load a texture
+    // const texture = textureLoader.load(
+    //     '../../assets/textures/uv-test-col.png',
+    // );
+    const texture = textureLoader.load(
+        textureUrl,
+        (texture) => {
+            console.log('Texture loaded successfully.');
+        },
+        (xhr) => {
+            console.log(`Texture ${xhr.loaded / xhr.total * 100}% loaded`);
+        },
+        (error) => {
+            console.error('An error occurred while loading the texture:', error);
+        }
+    );
+
+
+    // create a "standard" material
+    // const material = new MeshStandardMaterial({ color: 'purple' });
+
+    const material = new MeshStandardMaterial({
+        map: texture,
+    });
+
+    return material;
+}
 
 function createCube() {
     // create a geometry
@@ -6,7 +39,9 @@ function createCube() {
 
     // Switch the old "basic" material to
     // a physically correct "standard" material
-    const material = new MeshStandardMaterial({ color: "purple" });
+    // const material = new MeshStandardMaterial({ color: "purple" });
+    // 创建纹理
+    const material = createMaterial();
 
     // create a Mesh containing the geometry and material
     const cube = new Mesh(geometry, material);
